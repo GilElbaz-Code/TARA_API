@@ -4,8 +4,7 @@ BASE = "http://127.0.0.1:5000/"
 
 data = [
     {
-        "member_id": 222,
-        "member_name": "Gil",
+        "member_name": "Jimmy",
         "party": "Something",
         "gov_role": "Head of..",
         "knesset_role": "knesset_role",

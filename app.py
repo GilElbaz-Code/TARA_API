@@ -96,18 +96,18 @@ def add_member():
 def get_members():
     all_members = Member.query.all()
     result = members_schema.dump(all_members)
-    return jsonify(result.data)
+    return jsonify(result)
 
 
 # Get Single Member
-@app.route('/member/<id>', methods=['GET'])
+@app.route('/member/<member_id>', methods=['GET'])
 def get_product(member_id):
     member = Member.query.get(member_id)
     return member_schema.jsonify(member)
 
 
 # Update a Member
-@app.route('/member/<id>', methods=['PUT'])
+@app.route('/member/<member_id>', methods=['PUT'])
 def update_member(member_id):
     member = Member.query.get(member_id)
 
@@ -149,7 +149,7 @@ def update_member(member_id):
 
 
 # Delete Product
-@app.route('/member/<id>', methods=['DELETE'])
+@app.route('/member/<member_id>', methods=['DELETE'])
 def delete_product(member_id):
     member = Member.query.get(member_id)
     db.session.delete(member)
