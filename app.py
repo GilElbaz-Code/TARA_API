@@ -1,7 +1,6 @@
 from flask import Flask, jsonify, request
 from flask_marshmallow import Marshmallow
 from flask_sqlalchemy import SQLAlchemy
-import json
 
 app = Flask(__name__)
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///knesset.db'
@@ -30,11 +29,6 @@ class Member(db.Model):
     political_consultant_phone = db.Column(db.Integer)
     picture = db.Column(db.String(255))
 
-    # update_date = db.Column(db.Date())
-    # facebook = db.Column(db.String(255))
-    # instagram = db.Column(db.String(255))
-    # twitter = db.Column(db.String(255))
-
     def __init__(self, member_name, party, gov_role, knesset_role, party_role, personal_phone, office_phone, email,
                  speaker_name, speaker_phone, head_office_name, head_office_phone, political_consultant_name,
                  political_consultant_phone, picture):
@@ -62,6 +56,10 @@ class KnessetSchema(ma.Schema):
             'office_phone', 'email',
             'speaker_name', 'speaker_phone', 'head_office_name', 'head_office_phone', 'political_consultant_name',
             'political_consultant_phone', 'picture')
+
+
+member_schema = KnessetSchema()  # One
+members_schema = KnessetSchema(many=True)  # Many
 
 
 # Add member row
@@ -93,16 +91,72 @@ def add_member():
     return member_schema.jsonify(new_member)
 
 
-# Get All Products
-@app.route('/product', methods=['GET'])
+# Get All Members
+@app.route('/member', methods=['GET'])
 def get_members():
-    all_members = Product.query.all()
-    result = products_schema.dump(all_products)
+    all_members = Member.query.all()
+    result = members_schema.dump(all_members)
     return jsonify(result.data)
 
 
-member_schema = KnessetSchema()  # One
-members_schema = KnessetSchema(many=True)  # Many
+# Get Single Member
+@app.route('/member/<id>', methods=['GET'])
+def get_product(member_id):
+    member = Member.query.get(member_id)
+    return member_schema.jsonify(member)
+
+
+# Update a Member
+@app.route('/member/<id>', methods=['PUT'])
+def update_member(member_id):
+    member = Member.query.get(member_id)
+
+    member_name = request.json['member_name']
+    party = request.json['party']
+    gov_role = request.json['gov_role']
+    knesset_role = request.json['knesset_role']
+    party_role = request.json['party_role']
+    personal_phone = request.json['personal_phone']
+    office_phone = request.json['office_phone']
+    email = request.json['email']
+    speaker_name = request.json['speaker_name']
+    speaker_phone = request.json['speaker_phone']
+    head_office_name = request.json['head_office_name']
+    head_office_phone = request.json['head_office_phone']
+    political_consultant_name = request.json['political_consultant_name']
+    political_consultant_phone = request.json['political_consultant_phone']
+    picture = request.json['picture']
+
+    member.member_name = member_name
+    member.party = party
+    member.gov_role = gov_role
+    member.knesset_role = knesset_role
+    member.party_role = party_role
+    member.personal_phone = personal_phone
+    member.office_phone = office_phone
+    member.email = email
+    member.speaker_name = speaker_name
+    member.speaker_phone = speaker_phone
+    member.head_office_name = head_office_name
+    member.head_office_phone = head_office_phone
+    member.political_consultant_name = political_consultant_name
+    member.political_consultant_phone = political_consultant_phone
+    member.picture = picture
+
+    db.session.commit()
+
+    return member_schema.jsonify(member)
+
+
+# Delete Product
+@app.route('/member/<id>', methods=['DELETE'])
+def delete_product(member_id):
+    member = Member.query.get(member_id)
+    db.session.delete(member)
+    db.session.commit()
+
+    return member_schema.jsonify(member)
+
 
 if __name__ == "__main__":
     app.run(debug=True)
