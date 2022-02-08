@@ -1,6 +1,11 @@
-import requests
+import pandas as pd
 
-BASE = "http://127.0.0.1:5000/"
+raw = pd.read_excel('kms.xlsx')
+
+pd.options.display.max_rows = 999
+pd.options.display.max_columns = 999
+
+print(raw)
 
 data = [
     {
@@ -8,6 +13,7 @@ data = [
         "party": "Something",
         "gov_role": "Head of..",
         "knesset_role": "knesset_role",
+        "additional_role": "commitee",
         "party_role": "party_role",
         "personal_phone": 555,
         "office_phone": 3242,
@@ -18,10 +24,9 @@ data = [
         "head_office_phone": 231,
         "political_consultant_name": "sdas",
         "political_consultant_phone": 2312,
-        "picture": "sdas"
+        "picture": "sdas",
+        "position": "coalition"
     }
 ]
 
-for i in range(len(data)):
-    response = requests.post(f'{BASE}/Member/{str(i)}', data[i])
-    print(response.json())
+
