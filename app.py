@@ -1,6 +1,7 @@
 from flask import Flask, jsonify, request
 from flask_marshmallow import Marshmallow
 from flask_sqlalchemy import SQLAlchemy
+from file_reader import json_str
 
 app = Flask(__name__)
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///knesset.db'
@@ -161,7 +162,7 @@ def update_member(member_id):
     return member_schema.jsonify(member)
 
 
-# Delete Product
+# Delete Member
 @app.route('/member/<member_id>', methods=['DELETE'])
 def delete_product(member_id):
     member = Member.query.get(member_id)
@@ -169,6 +170,10 @@ def delete_product(member_id):
     db.session.commit()
 
     return member_schema.jsonify(member)
+
+def insert_from_file():
+    for record in json_str:
+        add_member()
 
 
 if __name__ == "__main__":

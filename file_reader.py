@@ -2,10 +2,7 @@ import pandas as pd
 
 raw = pd.read_excel('kms.xlsx')
 
-pd.options.display.max_rows = 999
-pd.options.display.max_columns = 999
-
-print(raw)
+json_str = raw.to_json(force_ascii=False, orient='records')
 
 data = [
     {
