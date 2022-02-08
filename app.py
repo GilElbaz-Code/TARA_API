@@ -17,6 +17,7 @@ class Member(db.Model):
     party = db.Column(db.String(100))
     gov_role = db.Column(db.String(255))
     knesset_role = db.Column(db.String(255))
+    additional_role = db.Column(db.String(255))  # check
     party_role = db.Column(db.String(255))
     personal_phone = db.Column(db.Integer)
     office_phone = db.Column(db.Integer)
@@ -28,14 +29,17 @@ class Member(db.Model):
     political_consultant_name = db.Column(db.String(100))
     political_consultant_phone = db.Column(db.Integer)
     picture = db.Column(db.String(255))
+    position = db.Column(db.String(255))  # check
 
-    def __init__(self, member_name, party, gov_role, knesset_role, party_role, personal_phone, office_phone, email,
+    def __init__(self, member_name, party, gov_role, knesset_role, additional_role, party_role, personal_phone,
+                 office_phone, email,
                  speaker_name, speaker_phone, head_office_name, head_office_phone, political_consultant_name,
-                 political_consultant_phone, picture):
+                 political_consultant_phone, picture, position):
         self.member_name = member_name
         self.party = party
         self.gov_role = gov_role
         self.knesset_role = knesset_role
+        self.additional_role = additional_role
         self.party_role = party_role
         self.personal_phone = personal_phone
         self.office_phone = office_phone
@@ -47,15 +51,17 @@ class Member(db.Model):
         self.political_consultant_name = political_consultant_name
         self.political_consultant_phone = political_consultant_phone
         self.picture = picture
+        self.position = position
 
 
 class KnessetSchema(ma.Schema):
     class Meta:
         fields = (
-            'member_id', 'member_name', 'party', 'gov_role', 'knesset_role', 'party_role', 'personal_phone',
+            'member_id', 'member_name', 'party', 'gov_role', 'knesset_role', 'additional_role', 'party_role',
+            'personal_phone',
             'office_phone', 'email',
             'speaker_name', 'speaker_phone', 'head_office_name', 'head_office_phone', 'political_consultant_name',
-            'political_consultant_phone', 'picture')
+            'political_consultant_phone', 'picture', 'position')
 
 
 member_schema = KnessetSchema()  # One
@@ -69,6 +75,7 @@ def add_member():
     party = request.json['party']
     gov_role = request.json['gov_role']
     knesset_role = request.json['knesset_role']
+    additional_role = request.json['additional_role']
     party_role = request.json['party_role']
     personal_phone = request.json['personal_phone']
     office_phone = request.json['office_phone']
@@ -80,10 +87,12 @@ def add_member():
     political_consultant_name = request.json['political_consultant_name']
     political_consultant_phone = request.json['political_consultant_phone']
     picture = request.json['picture']
+    position = request.json['position']
 
-    new_member = Member(member_name, party, gov_role, knesset_role, party_role, personal_phone, office_phone, email,
+    new_member = Member(member_name, party, gov_role, knesset_role, additional_role, party_role, personal_phone,
+                        office_phone, email,
                         speaker_name, speaker_phone, head_office_name, head_office_phone, political_consultant_name,
-                        political_consultant_phone, picture)
+                        political_consultant_phone, picture, position)
 
     db.session.add(new_member)
     db.session.commit()
@@ -115,6 +124,7 @@ def update_member(member_id):
     party = request.json['party']
     gov_role = request.json['gov_role']
     knesset_role = request.json['knesset_role']
+    additional_role = request.json['additional_role']
     party_role = request.json['party_role']
     personal_phone = request.json['personal_phone']
     office_phone = request.json['office_phone']
@@ -126,11 +136,13 @@ def update_member(member_id):
     political_consultant_name = request.json['political_consultant_name']
     political_consultant_phone = request.json['political_consultant_phone']
     picture = request.json['picture']
+    position = request.json['position']
 
     member.member_name = member_name
     member.party = party
     member.gov_role = gov_role
     member.knesset_role = knesset_role
+    member.additional_role = additional_role
     member.party_role = party_role
     member.personal_phone = personal_phone
     member.office_phone = office_phone
@@ -142,6 +154,7 @@ def update_member(member_id):
     member.political_consultant_name = political_consultant_name
     member.political_consultant_phone = political_consultant_phone
     member.picture = picture
+    member.position = position
 
     db.session.commit()
 
