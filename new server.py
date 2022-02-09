@@ -8,8 +8,9 @@ from sqlalchemy.orm import sessionmaker
 
 
 def load_data(file_name):
-    data = pd.read_csv('members.csv', index_col=False,)
-    return data.values.tolist()
+    df = pd.read_csv('members.csv', index_col=False,)
+    df.reset_index(drop=True, inplace=True)
+    return df.values.tolist()
 
 
 Base = declarative_base()
@@ -21,7 +22,8 @@ class Member(Base):
     __table_args__ = {'sqlite_autoincrement': True}
     # tell SQLAlchemy the name of column and its attributes:
     member_id = Column(Integer, primary_key=True)
-    member_name = Column(String)
+    first_name = Column(String)
+    last_name = Column(String)
     party = Column(String)
     gov_role = Column(String)
     knesset_role = Column(String)
@@ -57,23 +59,24 @@ if __name__ == "__main__":
 
     for i in data:
         record = Member(**{
-            'member_name': i[0],
-            'party': i[1],
-            'gov_role': i[2],
-            'knesset_role': i[3],
-            'additional_role': i[4],
-            'party_role': i[5],
-            'personal_phone': i[6],
-            'office_phone': i[7],
-            'email': i[8],
-            'speaker_name': i[8],
-            'speaker_phone': i[9],
-            'head_office_name': i[10],
-            'head_office_phone': i[11],
-            'political_consultant_name': i[12],
-            'political_consultant_phone': i[13],
-            'picture': i[14],
-            'position': i[15]
+            'first_name': i[0],
+            'last_name': i[1],
+            'party': i[2],
+            'gov_role': i[3],
+            'knesset_role': i[4],
+            'additional_role': i[5],
+            'party_role': i[6],
+            'personal_phone': i[7],
+            'office_phone': i[8],
+            'email': i[9],
+            'speaker_name': i[10],
+            'speaker_phone': i[11],
+            'head_office_name': i[12],
+            'head_office_phone': i[13],
+            'political_consultant_name': i[14],
+            'political_consultant_phone': i[15],
+            'picture': i[16],
+            'position': i[17]
         })
         s.add(record)  # Add all the records
 
