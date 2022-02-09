@@ -1,10 +1,13 @@
+import requests
 from flask import Flask, jsonify, request
 from flask_marshmallow import Marshmallow
 from flask_sqlalchemy import SQLAlchemy
-from file_reader import json_str
+from sqlalchemy import create_engine
+import pandas as pd
+import mysql.connector
 
 app = Flask(__name__)
-app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///knesset.db'
+app.config['SQLALCHEMY_DATABASE_URI'] = 'mysql:///knesset.db'
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 app.config['JSON_SORT_KEYS'] = False
 db = SQLAlchemy(app)
@@ -170,10 +173,6 @@ def delete_product(member_id):
     db.session.commit()
 
     return member_schema.jsonify(member)
-
-def insert_from_file():
-    for record in json_str:
-        add_member()
 
 
 if __name__ == "__main__":

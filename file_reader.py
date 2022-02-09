@@ -1,8 +1,11 @@
 import pandas as pd
 
 raw = pd.read_excel('kms.xlsx')
+raw_csv = raw.to_csv('members.csv')
 
-json_str = raw.to_json(force_ascii=False, orient='records')
+print(raw_csv)
+
+#json_file = raw.to_json(force_ascii=False, orient='records')
 
 data = [
     {
